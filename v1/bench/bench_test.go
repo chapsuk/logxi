@@ -36,7 +36,7 @@ func toJSON(m map[string]interface{}) string {
 
 func BenchmarkLog(b *testing.B) {
 	//fmt.Println("")
-	l := L.New(os.Stdout, "bench ", L.LstdFlags)
+	l := L.New(os.Stderr, "bench ", L.LstdFlags)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		debug := map[string]interface{}{"l": "debug", "key1": 1, "key2": "string", "key3": false}
@@ -56,7 +56,7 @@ func BenchmarkLog(b *testing.B) {
 
 func BenchmarkLogComplex(b *testing.B) {
 	//fmt.Println("")
-	l := L.New(os.Stdout, "bench ", L.LstdFlags)
+	l := L.New(os.Stderr, "bench ", L.LstdFlags)
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		debug := map[string]interface{}{"l": "debug", "key1": 1, "obj": testObject}
@@ -76,7 +76,7 @@ func BenchmarkLogComplex(b *testing.B) {
 
 func BenchmarkLogxi(b *testing.B) {
 	//fmt.Println("")
-	stdout := log.NewConcurrentWriter(os.Stdout)
+	stdout := log.NewConcurrentWriter(os.Stderr)
 	l := log.NewLogger3(stdout, "bench", log.NewJSONFormatter("bench"))
 	l.SetLevel(log.LevelDebug)
 
@@ -92,7 +92,7 @@ func BenchmarkLogxi(b *testing.B) {
 
 func BenchmarkLogxiComplex(b *testing.B) {
 	//fmt.Println("")
-	stdout := log.NewConcurrentWriter(os.Stdout)
+	stdout := log.NewConcurrentWriter(os.Stderr)
 	l := log.NewLogger3(stdout, "bench", log.NewJSONFormatter("bench"))
 	l.SetLevel(log.LevelDebug)
 
@@ -110,6 +110,7 @@ func BenchmarkLogxiComplex(b *testing.B) {
 func BenchmarkLogrus(b *testing.B) {
 	//fmt.Println("")
 	l := logrus.New()
+	l.Out = os.Stderr
 	l.Formatter = &logrus.JSONFormatter{}
 
 	b.ResetTimer()
@@ -125,6 +126,7 @@ func BenchmarkLogrus(b *testing.B) {
 func BenchmarkLogrusComplex(b *testing.B) {
 	//fmt.Println("")
 	l := logrus.New()
+	l.Out = os.Stderr
 	l.Formatter = &logrus.JSONFormatter{}
 
 	b.ResetTimer()
@@ -140,7 +142,7 @@ func BenchmarkLogrusComplex(b *testing.B) {
 func BenchmarkLog15(b *testing.B) {
 	//fmt.Println("")
 	l := log15.New(log15.Ctx{"_n": "bench", "_p": pid})
-	l.SetHandler(log15.SyncHandler(log15.StreamHandler(os.Stdout, log15.JsonFormat())))
+	l.SetHandler(log15.SyncHandler(log15.StreamHandler(os.Stderr, log15.JsonFormat())))
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -156,7 +158,7 @@ func BenchmarkLog15(b *testing.B) {
 func BenchmarkLog15Complex(b *testing.B) {
 	//fmt.Println("")
 	l := log15.New(log15.Ctx{"_n": "bench", "_p": pid})
-	l.SetHandler(log15.SyncHandler(log15.StreamHandler(os.Stdout, log15.JsonFormat())))
+	l.SetHandler(log15.SyncHandler(log15.StreamHandler(os.Stderr, log15.JsonFormat())))
 
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
